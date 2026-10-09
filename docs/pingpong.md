@@ -1,4 +1,6 @@
-# Giải thích chi tiết `user/pingpong.c`
+# user/pingpong.c — thiết kế và luồng chạy
+
+> Giải thích ngắn nằm trong comment của `user/pingpong.c`. Tài liệu này ghi phần **vì sao** chọn cách làm đó, luồng chạy lúc thực thi, và kết quả kiểm thử. Không tham chiếu theo số dòng để sửa code không làm hỏng tài liệu.
 
 Chương trình cho hai tiến trình cha–con truyền qua lại **1 byte**: cha gửi sang con ("ping"), con gửi trả lại cha ("pong"). Mục đích là làm quen với `pipe`, `fork`, `read`, `write`, `getpid`.
 
@@ -92,7 +94,7 @@ Vì sao `p2c` và `c2p` là mảng 2 phần tử? Vì `pipe()` cần ghi **hai**
 
 ---
 
-## 3. Tạo hai pipe (dòng 19–22)
+## 3. Tạo hai pipe
 
 ```c
 if(pipe(p2c) < 0 || pipe(c2p) < 0){
@@ -118,7 +120,7 @@ Sau hai dòng này, tiến trình có 4 fd mới. Giả sử fd 0,1,2 đã dùng
 
 ---
 
-## 4. `fork()` và cách phân biệt cha/con (dòng 24–27)
+## 4. `fork()` và cách phân biệt cha/con
 
 ```c
 if((pid = fork()) < 0){
@@ -143,7 +145,7 @@ Sau `fork()`, **mỗi đầu pipe có 2 tham chiếu** (một của cha, một c
 
 ---
 
-## 5. Nhánh con (dòng 29–48)
+## 5. Nhánh con
 
 ```c
 if(pid == 0){
@@ -213,7 +215,7 @@ Gửi trả **chính byte vừa nhận** (`buf`). Có thể gửi byte bất k�
 
 ---
 
-## 6. Nhánh cha (dòng 50–68)
+## 6. Nhánh cha
 
 ```c
 close(p2c[0]);
